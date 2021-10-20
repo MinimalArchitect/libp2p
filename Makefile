@@ -1,5 +1,6 @@
-CC = cc
-CFLAGS = -I include -std=c99
+CC = gcc
+DEFS = -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_SVID_SOURCE -D_POSIX_C_SOURCE=200809L
+CFLAGS = -Wall -g -std=c99 -pedantic $(DEFS) -I include
 
 SRC := $(shell (find src -iname *.c )) $(shell (find thirdparty -iname *.c ))
 INC := $(shell (find include -iname *.h))
@@ -11,7 +12,7 @@ TEST_SRC := $(shell (find test -iname *.c ))
 TEST_OBJ := $(TEST_SRC:test/%.c=obj/%.o)
 TEST_BIN := $(TEST_SRC:test/%.c=build/%)
 
-all: lib/libp2p.a
+all: lib/p2p.a
 
 test: $(TEST_BIN)
 
@@ -24,15 +25,16 @@ obj/%.o: thirdparty/%.c $(INC)
 obj/%.o: test/%.c $(INC)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-lib/libp2p.a: $(OBJ)
+lib/p2p.a: $(OBJ)
+	@echo $(OBJ)
 	ar rcs $@ $^
 
-build/%: obj/%.o lib/libp2p.a
-	$(CC) $(LDFALGS) -Llib -o $@ $<
+build/%: obj/%.o lib/p2p.a
+	$(CC) $(LDFALGS) -o $@ $< lib/p2p.a
 
 clean:
 	rm -f $(OBJ)
 	rm -f $(TEST_BIN)
-	rm -f lib/libp2p.a
+	rm -f lib/p2p.a
 
 .PHONY: all clean test
