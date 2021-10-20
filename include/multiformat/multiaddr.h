@@ -14,7 +14,7 @@ int multiaddr_free(struct multiaddr *address);
 
 int multiaddr_copy(struct multiaddr *destination, struct multiaddr *source);
 
-int multiaddr_encapsulate(struct multiaddr *, const struct multiaddr *);
-int multiaddr_decapsulate(struct multiaddr *, struct multiaddr *);
+int multiaddr_encapsulate(struct multiaddr *address, const struct multiaddr *payload);
+int multiaddr_decapsulate(struct multiaddr *address, struct multiaddr *payload);
 
 int multiaddr_compare(struct multiaddr *left, struct multiaddr *right);
